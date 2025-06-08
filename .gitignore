@@ -1,0 +1,5 @@
+.env
+settings.json
+.venv/
+.vscode/
+launch.json
