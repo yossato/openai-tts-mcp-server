@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/yoshiaki/Projects/openai-tts-mcp-server"]
+    },
+    "openai-tts": {
+      "command": "/Users/yoshiaki/Projects/openai-tts-mcp-server/.venv/bin/python",
+      "args": ["/Users/yoshiaki/Projects/openai-tts-mcp-server/src/main.py"],
+      "cwd": "/Users/yoshiaki/Projects/openai-tts-mcp-server"
+    }
+  }
+}

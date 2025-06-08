@@ -1,0 +1,13 @@
+# MCP Server dependencies
+# Note: Install via: pip install mcp
+# If that fails, try: pip install model-context-protocol
+mcp
+
+# OpenAI API
+openai>=1.0.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# Audio processing (for future phases)
+sounddevice>=0.4.0
