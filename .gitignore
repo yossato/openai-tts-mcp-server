@@ -6,3 +6,5 @@ launch.json
 old/
 __pycache__/
 __init__.py
+debug.log
+*.log
