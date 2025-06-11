@@ -1,0 +1,22 @@
+{
+  "defaults": {
+    "voice": "alloy",
+    "speed": 1.0,
+    "response_format": "mp3",
+    "output_mode": "file",
+    "instructions": null
+  },
+  "cache": {
+    "enabled": true,
+    "max_size": 100,
+    "ttl_hours": 24
+  },
+  "server": {
+    "name": "openai-tts",
+    "version": "0.3.0",
+    "temp_dir_cleanup_hours": 24,
+    "max_text_length": 4096,
+    "long_text_split_size": 4000
+  },
+  "custom_presets": {}
+}

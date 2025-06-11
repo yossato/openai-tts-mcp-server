@@ -1,4 +1,7 @@
-# MCP Server dependencies
+# OpenAI TTS MCP Server Dependencies
+# Phase 3: プロダクション品質対応版
+
+# MCP Server Framework
 # Note: Install via: pip install mcp
 # If that fails, try: pip install model-context-protocol
 mcp
@@ -9,5 +12,19 @@ openai>=1.0.0
 # Environment variable management
 python-dotenv>=1.0.0
 
-# Audio processing (for future phases)
+# Audio processing
 sounddevice>=0.4.0
+
+# Optional dependencies for enhanced features
+# Audio file merging (for long text splitting)
+# Install with: pip install pydub
+# pydub>=0.25.0
+
+# For MP3 support with pydub (optional)
+# On macOS: brew install ffmpeg
+# On Ubuntu: sudo apt-get install ffmpeg
+# On Windows: Download ffmpeg and add to PATH
+
+# Development dependencies (optional)
+# pytest>=7.0.0
+# pytest-asyncio>=0.21.0
