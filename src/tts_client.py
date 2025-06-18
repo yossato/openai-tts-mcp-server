@@ -135,6 +135,12 @@ class TTSClient:
             preset=preset,
         )
 
+        # Streaming playback works best with uncompressed audio.
+        # If the requested format is MP3 (the default), switch to WAV
+        # to avoid playback issues such as white noise.
+        if validated_params["response_format"] == "mp3":
+            validated_params["response_format"] = "wav"
+
         processed_text = normalize_text_for_speech(validated_params["text"])
 
         api_params = {
