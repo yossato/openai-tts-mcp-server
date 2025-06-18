@@ -114,6 +114,52 @@ class TTSClient:
         
         # 単一ファイル生成
         return await self._generate_single_speech(processed_text, validated_params, enable_cache)
+
+    async def generate_speech_stream(
+        self,
+        text: str,
+        voice: Optional[VoiceType] = None,
+        speed: Optional[float] = None,
+        response_format: Optional[ResponseFormat] = None,
+        instructions: Optional[str] = None,
+        preset: Optional[str] = None,
+    ):
+        """Create a streaming speech response for immediate playback."""
+        validated_params = self.config.validate_tts_parameters(
+            text=text,
+            voice=voice,
+            speed=speed,
+            response_format=response_format,
+            output_mode="play",
+            instructions=instructions,
+            preset=preset,
+        )
+
+        # Streaming playback works best with uncompressed audio.
+        # If the requested format is MP3 (the default), switch to WAV
+        # to avoid playback issues such as white noise.
+        if validated_params["response_format"] == "mp3":
+            validated_params["response_format"] = "wav"
+
+        processed_text = normalize_text_for_speech(validated_params["text"])
+
+        api_params = {
+            "model": "tts-1",
+            "voice": validated_params["voice"],
+            "input": processed_text,
+            "response_format": validated_params["response_format"],
+            "speed": validated_params["speed"],
+        }
+
+        try:
+            if hasattr(self.client.audio.speech, "with_streaming_response"):
+                return self.client.audio.speech.with_streaming_response.create(
+                    **api_params
+                )
+        except Exception:
+            pass
+        # Fallback for older versions
+        return await self.client.audio.speech.create(**api_params, stream=True)
     
     async def _generate_single_speech(
         self,
