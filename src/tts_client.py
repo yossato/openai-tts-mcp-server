@@ -146,13 +146,14 @@ class TTSClient:
         }
 
         try:
-            return await self.client.audio.speech.create(**api_params, stream=True)
-        except TypeError:
-            # Fallback for older ``openai`` versions that use
-            # ``with_streaming_response`` instead of ``stream`` parameter.
-            return await self.client.audio.speech.with_streaming_response.create(
-                **api_params
-            )
+            if hasattr(self.client.audio.speech, "with_streaming_response"):
+                return self.client.audio.speech.with_streaming_response.create(
+                    **api_params
+                )
+        except Exception:
+            pass
+        # Fallback for older versions
+        return await self.client.audio.speech.create(**api_params, stream=True)
     
     async def _generate_single_speech(
         self,

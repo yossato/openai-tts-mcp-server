@@ -1,4 +1,4 @@
-"""Audio playback utilities using OpenAI's cross platform player."""
+"""Audio playback utilities using OpenAI's helpers."""
 
 import asyncio
 import logging
@@ -7,8 +7,10 @@ from typing import Any, Union
 
 try:
     from openai import audio as openai_audio
+    from openai.helpers import LocalAudioPlayer
 except Exception:  # pragma: no cover - openai might not be installed
     openai_audio = None
+    LocalAudioPlayer = None
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +20,7 @@ class AudioPlayer:
 
     def __init__(self) -> None:
         logger.info("AudioPlayer initialized")
+        self._player = LocalAudioPlayer() if LocalAudioPlayer else None
 
     async def play(self, source: Union[str, Path, Any]) -> bool:
         """Play audio from a file path or OpenAI response object."""
@@ -25,7 +28,17 @@ class AudioPlayer:
             logger.error("openai.audio module not available")
             return False
         try:
-            result = openai_audio.play(str(source)) if isinstance(source, (str, Path)) else openai_audio.play(source)
+            if isinstance(source, (str, Path)):
+                result = openai_audio.play(str(source))
+                if asyncio.iscoroutine(result):
+                    await result
+                return True
+
+            if self._player:
+                await self._player.play(source)
+                return True
+
+            result = openai_audio.play(source)
             if asyncio.iscoroutine(result):
                 await result
             return True

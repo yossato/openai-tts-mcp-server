@@ -312,7 +312,11 @@ async def handle_generate_speech(arguments: dict | None) -> list[types.TextConte
                 preset=preset,
             )
             audio_player = AudioPlayer()
-            played = await audio_player.play(stream_resp)
+            if hasattr(stream_resp, "__aenter__"):
+                async with stream_resp as resp:
+                    played = await audio_player.play(resp)
+            else:
+                played = await audio_player.play(stream_resp)
 
         result = []
         if output_mode in ["file", "both"]:
