@@ -295,71 +295,63 @@ async def handle_generate_speech(arguments: dict | None) -> list[types.TextConte
         raise ValueError("textパラメータが指定されていません")
     
     try:
-        # TTSクライアントで音声生成
         logger.info(f"Generating speech - text: {len(text)} chars, preset: {preset}")
         tts_client = TTSClient()
-        
-        # 音声生成（長文対応）
-        result = await tts_client.generate_speech(
-            text=text,
-            voice=voice,
-            speed=speed,
-            response_format=response_format,
-            output_mode=output_mode,
-            instructions=instructions,
-            preset=preset,
-            enable_cache=enable_cache
-        )
-        
-        # 結果が複数ファイル（長文分割）の場合の処理
-        if isinstance(result, list):
-            file_paths = result
-            
-            # 結合オプションが有効な場合
-            if merge_long_audio and len(file_paths) > 1:
-                try:
-                    merged_path = tts_client.merge_long_speech_files(
-                        file_paths, 
-                        response_format or "mp3"
-                    )
-                    file_paths = [merged_path]
-                    logger.info("Long audio files merged successfully")
-                except Exception as e:
-                    logger.warning(f"Failed to merge audio files: {e}")
-                    # 結合に失敗しても分割ファイルは利用可能
-            
-            main_file_path = file_paths[0]
-            is_long_text = True
-        else:
-            file_paths = [result]
-            main_file_path = result
-            is_long_text = False
-        
-        # 音声再生処理
+
+        play_requested = output_mode in ["play", "both"]
+
+        stream_resp = None
         played = False
-        if output_mode in ["play", "both"]:
+        if play_requested:
+            stream_resp = await tts_client.generate_speech_stream(
+                text=text,
+                voice=voice,
+                speed=speed,
+                response_format=response_format,
+                instructions=instructions,
+                preset=preset,
+            )
             audio_player = AudioPlayer()
-            
-            if is_long_text and not merge_long_audio:
-                # 分割ファイルを順次再生
-                for file_path in file_paths:
-                    played = await audio_player.play(file_path)
-                    if not played:
-                        break
-            else:
-                # 単一ファイル再生
-                played = await audio_player.play(main_file_path)
+            played = await audio_player.play(stream_resp)
+
+        result = []
+        if output_mode in ["file", "both"]:
+            result = await tts_client.generate_speech(
+                text=text,
+                voice=voice,
+                speed=speed,
+                response_format=response_format,
+                output_mode="file",
+                instructions=instructions,
+                preset=preset,
+                enable_cache=enable_cache,
+            )
         
-        # output_mode: "play" の場合、再生後にファイルを削除
-        if output_mode == "play":
-            for file_path in file_paths:
-                try:
-                    Path(file_path).unlink()
-                    logger.info(f"Temporary file deleted: {Path(file_path).name}")
-                except Exception as e:
-                    logger.warning(f"Failed to delete temporary file: {e}")
-            
-            main_file_path = f"<temporary files - deleted after playback: {len(file_paths)} files>"
+        if result:
+            if isinstance(result, list):
+                file_paths = result
+                if merge_long_audio and len(file_paths) > 1:
+                    try:
+                        merged_path = tts_client.merge_long_speech_files(
+                            file_paths,
+                            response_format or "mp3",
+                        )
+                        file_paths = [merged_path]
+                        logger.info("Long audio files merged successfully")
+                    except Exception as e:
+                        logger.warning(f"Failed to merge audio files: {e}")
+                main_file_path = file_paths[0]
+                is_long_text = True
+            else:
+                file_paths = [result]
+                main_file_path = result
+                is_long_text = False
+        else:
+            file_paths = []
+            main_file_path = "<streaming playback>"
+            is_long_text = False
+
+        # ``played`` indicates whether playback succeeded when requested
         
         # 古いファイルのクリーンアップ
         tts_client.cleanup_old_files()

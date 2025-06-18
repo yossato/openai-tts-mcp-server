@@ -114,6 +114,45 @@ class TTSClient:
         
         # 単一ファイル生成
         return await self._generate_single_speech(processed_text, validated_params, enable_cache)
+
+    async def generate_speech_stream(
+        self,
+        text: str,
+        voice: Optional[VoiceType] = None,
+        speed: Optional[float] = None,
+        response_format: Optional[ResponseFormat] = None,
+        instructions: Optional[str] = None,
+        preset: Optional[str] = None,
+    ):
+        """Create a streaming speech response for immediate playback."""
+        validated_params = self.config.validate_tts_parameters(
+            text=text,
+            voice=voice,
+            speed=speed,
+            response_format=response_format,
+            output_mode="play",
+            instructions=instructions,
+            preset=preset,
+        )
+
+        processed_text = normalize_text_for_speech(validated_params["text"])
+
+        api_params = {
+            "model": "tts-1",
+            "voice": validated_params["voice"],
+            "input": processed_text,
+            "response_format": validated_params["response_format"],
+            "speed": validated_params["speed"],
+        }
+
+        try:
+            return await self.client.audio.speech.create(**api_params, stream=True)
+        except TypeError:
+            # Fallback for older ``openai`` versions that use
+            # ``with_streaming_response`` instead of ``stream`` parameter.
+            return await self.client.audio.speech.with_streaming_response.create(
+                **api_params
+            )
     
     async def _generate_single_speech(
         self,
