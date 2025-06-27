@@ -168,7 +168,8 @@ async def generate_long_speech(text: str, **params) -> List[str]:
 ### ファイル構成
 ```
 openai-tts-mcp-server/
-├── README.md                 # このファイル
+├── README.md
+├── docs/                     # ドキュメント類 (このファイルを含む)
 ├── .env                      # 環境変数（gitignore対象）
 ├── .gitignore
 ├── requirements.txt          # Python依存関係

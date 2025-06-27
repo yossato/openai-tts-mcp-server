@@ -95,8 +95,8 @@ if output_mode == "play":
 
 ### 新規ファイル
 - **`src/audio_player.py`**: プラットフォーム対応音声プレイヤー
-- **`PHASE2_TEST.md`**: Phase 2テスト手順書
-- **`SECURITY.md`**: セキュリティ対策ドキュメント
+- **`docs/PHASE2_TEST.md`**: Phase 2テスト手順書
+- **`docs/SECURITY.md`**: セキュリティ対策ドキュメント
 - **`debug_server.py`**: 開発者向けデバッグツール
 
 ### 拡張されたファイル
@@ -182,9 +182,9 @@ if output_mode == "play":
 
 ## 🔗 関連ドキュメント
 
-- **Phase 1完成報告**: `PHASE1-completion-report.md`
-- **Phase 2テスト手順**: `PHASE2_TEST.md`
-- **セキュリティ対策**: `SECURITY.md`
+- **Phase 1完成報告**: `docs/PHASE1-completion-report.md`
+- **Phase 2テスト手順**: `docs/PHASE2_TEST.md`
+- **セキュリティ対策**: `docs/SECURITY.md`
 - **プロジェクト概要**: `README.md`
 
 ## 📝 技術的詳細
@@ -199,10 +199,11 @@ if output_mode == "play":
 ```
 openai-tts-mcp-server/
 ├── README.md                     # プロジェクト概要
-├── PHASE1-completion-report.md   # Phase 1完成報告
-├── PHASE2-completion-report.md   # Phase 2完成報告（このファイル）
-├── PHASE2_TEST.md                # Phase 2テスト手順
-├── SECURITY.md                   # セキュリティ対策
+├── docs/
+│   ├── PHASE1-completion-report.md   # Phase 1完成報告
+│   ├── PHASE2-completion-report.md   # Phase 2完成報告（このファイル）
+│   ├── PHASE2_TEST.md                # Phase 2テスト手順
+│   └── SECURITY.md                   # セキュリティ対策
 ├── requirements.txt              # Python依存関係
 ├── debug_server.py               # デバッグツール
 ├── src/

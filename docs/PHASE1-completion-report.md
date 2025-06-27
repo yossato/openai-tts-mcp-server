@@ -63,13 +63,15 @@ OpenAI TTS MCP Serverの最小限動作版（MVP）が正常に完成し、す�
 ```
 openai-tts-mcp-server/
 ├── README.md
+├── docs/
+│   ├── PHASE1_TEST.md         # テスト手順書
+│   └── PHASE1-completion-report.md   # このファイル
 ├── requirements.txt
 ├── .env                    # 環境変数（OPENAI_API_KEY）
 ├── src/
 │   ├── main.py            # MCPサーバーメイン実装
 │   ├── tts_client.py      # OpenAI TTS APIクライアント
 │   └── __init__.py
-├── PHASE1_TEST.md         # テスト手順書
 └── claude_desktop_config_final.json  # Claude Desktop設定例
 ```
 
@@ -115,7 +117,7 @@ openai-tts-mcp-server/
 
 - **メイン実装**: `src/main.py`
 - **TTS クライアント**: `src/tts_client.py`
-- **テスト手順**: `PHASE1_TEST.md`
+- **テスト手順**: `docs/PHASE1_TEST.md`
 - **設定例**: `claude_desktop_config_final.json`
 
 ## 📝 備考

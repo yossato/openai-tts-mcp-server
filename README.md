@@ -12,4 +12,4 @@ generate speech audio, play it back, and manage presets for different voices.
 - Support for multiple voices and audio formats
 
 The code in `src/` implements the server and helpers. See
-`DEVELOPMENT_PLAN.md` for the original phased development notes.
+`docs/DEVELOPMENT_PLAN.md` for the original phased development notes.
