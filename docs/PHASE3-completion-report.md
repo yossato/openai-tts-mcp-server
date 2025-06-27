@@ -54,8 +54,9 @@ OpenAI TTS MCP ServerのPhase 3が完成し、プロダクション品質の音�
 openai-tts-mcp-server/
 ├── README.md                     # プロジェクト概要
 ├── config.json                   # 設定ファイル（新規）
-├── PHASE3_TEST.md               # Phase 3テスト手順（新規）
-├── PHASE3-completion-report.md   # Phase 3完成報告（新規）
+├── docs/
+│   ├── PHASE3_TEST.md               # Phase 3テスト手順（新規）
+│   └── PHASE3-completion-report.md   # Phase 3完成報告（新規）
 ├── requirements.txt              # 依存関係（更新）
 ├── src/
 │   ├── main.py                   # MCPサーバー（6ツール対応）
@@ -490,5 +491,5 @@ Phase 3により、OpenAI TTS MCP Serverは単純な音声生成ツールから�
 - `src/tts_client.py` - 拡張TTSクライアント
 - `src/main.py` - メインサーバー（6ツール対応）
 - `config.json` - 設定ファイル
-- `PHASE3_TEST.md` - テスト手順書
+- `docs/PHASE3_TEST.md` - テスト手順書
 - `requirements.txt` - 依存関係（更新）
